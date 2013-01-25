@@ -33,9 +33,9 @@ class Frame(wx.Frame):
         powerps1 = wx.StaticText(panel, wx.NewId(), label = "Power per second")
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(panel)
-        sizer.Add(voltage1, border = 8)
-        sizer.Add(power1, border = 8)
-        sizer.Add(powerps1, border = 8)
+#         sizer.Add(voltage1, border = 8)
+#         sizer.Add(power1, border = 8)
+#         sizer.Add(powerps1, border = 8)
         self.SetSizer(sizer)
         self.Layout()
         
