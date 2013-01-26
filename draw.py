@@ -14,8 +14,8 @@ import database
 
 class Draw:
     def __init__(self, platform, outputlevel = 1, showplot = False, replot = False, save_flag = False):
-        if platform == u"windows":
-            matplotlib.rc('font',**{'family':'arial'})
+#         if platform == u"windows":
+#             matplotlib.rc('font',**{'family':'arial'})
         if platform == u"linux":
             matplotlib.rc('font',**{'family':'Cantarell'})
         matplotlib.pyplot.ticklabel_format(style='sci',scilimits=(-4,4),axis='both')
