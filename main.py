@@ -17,6 +17,8 @@ import time
 import database
 import draw
 import GUI
+import sys
+import re
 
 device = u"Oscilloscope"
 outputlevel = 1
@@ -25,6 +27,7 @@ replot = False
 plot_flag = True
 report_flag = True
 save_flag = True
+platform = re.findall(u"linux|windows", sys.platform, flags=re.UNICODE+re.IGNORECASE)[0]
 
 dt = lambda x,y: " " + "in" + " " + str((y-x)/60) + " " + "min"
 
@@ -49,7 +52,7 @@ print "taking data DONE" + dt(t1,t2)
  
 if plot_flag == True:
     t1 = time.clock()
-    pl = draw.Draw(outputlevel, showplot, replot, save_flag)
+    pl = draw.Draw(platform, outputlevel, showplot, replot, save_flag)
     for element in data:
         pl.plot(element,conn)
     t2 = time.clock()

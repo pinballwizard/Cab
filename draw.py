@@ -13,8 +13,11 @@ import matplotlib
 import database
 
 class Draw:
-    def __init__(self, outputlevel = 1, showplot = False, replot = False, save_flag = False):
-        matplotlib.rc('font',**{'family':'arial'})
+    def __init__(self, platform, outputlevel = 1, showplot = False, replot = False, save_flag = False):
+        if platform == u"windows":
+            matplotlib.rc('font',**{'family':'arial'})
+        if platform == u"linux":
+            matplotlib.rc('font',**{'family':'Cantarell'})
         matplotlib.pyplot.ticklabel_format(style='sci',scilimits=(-4,4),axis='both')
         self.showplot = showplot
         self.outputlevel = outputlevel
@@ -41,12 +44,12 @@ class Draw:
             if os.path.exists(path) == False or self.replot == True:
                 (x, y, xpiclabel, ypiclabel) = self.__labelchoiser(data, mtype)
                 end = self.__crop(y)
-                fig = plt.figure()
+#                 fig = plt.figure()
                 plt.plot(x[0:end], y[0:end], linewidth = .5)
                 plt.xlabel(xpiclabel)
                 plt.ylabel(ypiclabel)
                 plt.grid(True)
-                self.saveplot(path, fig, conn)
+                self.saveplot(path, conn)
                 if self.showplot == True:
                     plt.show()
                 plt.close("all")
@@ -57,7 +60,7 @@ class Draw:
             if mtype == u"Spectrogram":
                 data.fftpicpath = path
                 
-    def saveplot(self, path, fig, conn):
+    def saveplot(self, path, conn):
         if self.save_flag:
             plt.savefig(path, format = "png", dpi = 200)
 #             g = plt.imread(path)
@@ -75,6 +78,9 @@ class Draw:
         return end
 
 if __name__ == "__main__":
+    import re
+    import sys
+    platform = re.findall(u"linux|windows", sys.platform, flags=re.UNICODE+re.IGNORECASE)[0]
     class DataForTest:
         def __init__(self,limitvalue = 10):
             self.xvalue = range(1,limitvalue,1)
@@ -94,6 +100,6 @@ if __name__ == "__main__":
             self.units = u"Volts"
             self.path = "D:\\1.csv"
     data1 = DataForTest()
-    draw1 = Draw(showplot = True, save_flag = True, replot = True)
+    draw1 = Draw(platform = platform, showplot = True, save_flag = True, replot = True)
     conn = database.opendb()
     draw1.plot(data1, conn)

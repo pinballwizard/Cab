@@ -27,12 +27,12 @@ class Frame(wx.Frame):
         self.doLayout()
     
     def doLayout(self):
-        panel = wx.Panel(self)
-        voltage1 = wx.StaticText(panel, wx.NewId(), label = "Max Voltage")
-        power1 = wx.StaticText(panel, wx.NewId(), label = "Power")
-        powerps1 = wx.StaticText(panel, wx.NewId(), label = "Power per second")
+#         panel = wx.Panel(self)
+        voltage1 = wx.StaticText(self, wx.NewId(), label = "Max Voltage")
+        power1 = wx.StaticText(self, wx.NewId(), label = "Power")
+        powerps1 = wx.StaticText(self, wx.NewId(), label = "Power per second")
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(panel)
+#         sizer.Add(panel)
 #         sizer.Add(voltage1, border = 8)
 #         sizer.Add(power1, border = 8)
 #         sizer.Add(powerps1, border = 8)
