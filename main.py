@@ -11,14 +11,13 @@ Created on 25.09.2012
 Переделать класс данных для наследования
 '''
 
-import first
+import filesys
 import odtwrite
 import time
 import database
 import draw
 import GUI
 import sys
-import re
 
 device = u"Oscilloscope"
 outputlevel = 1
@@ -27,11 +26,10 @@ replot = False
 plot_flag = True
 report_flag = True
 save_flag = True
-platform = re.findall(u"linux|windows", sys.platform, flags=re.UNICODE+re.IGNORECASE)[0]
+platformd = {"linux2" : u"linux", "win32" : u"windows"}
 
 dt = lambda x,y: " " + "in" + " " + str((y-x)/60) + " " + "min"
-
-fileproc = first.FileSys(device,outputlevel)
+fileproc = filesys.FileSys(device,outputlevel)
 filedir = GUI.dirchoise(1)
 savepath = GUI.dirchoise(2)
 
@@ -40,10 +38,10 @@ data = []
 for path in fileproc.filelist(filedir):
     if outputlevel >= 1:
         print path
-    measurment = first.Data(fileproc.csvread(path), path)
+    measurment = filesys.Data(fileproc.csvread(path), path)
     conn = database.opendb(savepath)
-    database.inittable(conn)
-    database.insert(conn, measurment)
+    database.inittable(conn, tablename = "main")
+    database.insert(conn, measurment, tablename = "main")
     data.append(measurment)
     if measurment.a_flag == True and outputlevel >= 2:
         print "attenuator!!!"
@@ -52,7 +50,7 @@ print "taking data DONE" + dt(t1,t2)
  
 if plot_flag == True:
     t1 = time.clock()
-    pl = draw.Draw(platform, outputlevel, showplot, replot, save_flag)
+    pl = draw.Draw(platform = platformd[sys.platform], outputlevel, showplot, replot, save_flag)
     for element in data:
         pl.plot(element,conn)
     t2 = time.clock()

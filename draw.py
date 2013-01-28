@@ -14,8 +14,8 @@ import database
 
 class Draw:
     def __init__(self, platform, outputlevel = 1, showplot = False, replot = False, save_flag = False):
-#         if platform == u"windows":
-#             matplotlib.rc('font',**{'family':'arial'})
+        if platform == u"windows":
+            matplotlib.rc('font',**{'family':'arial'})
         if platform == u"linux":
             matplotlib.rc('font',**{'family':'Cantarell'})
         matplotlib.pyplot.ticklabel_format(style='sci',scilimits=(-4,4),axis='both')
@@ -78,9 +78,8 @@ class Draw:
         return end
 
 if __name__ == "__main__":
-    import re
     import sys
-    platform = re.findall(u"linux|windows", sys.platform, flags=re.UNICODE+re.IGNORECASE)[0]
+    platformd = {"linux2" : u"linux", "win32" : u"windows"}
     class DataForTest:
         def __init__(self,limitvalue = 10):
             self.xvalue = range(1,limitvalue,1)
@@ -100,6 +99,6 @@ if __name__ == "__main__":
             self.units = u"Volts"
             self.path = "D:\\1.csv"
     data1 = DataForTest()
-    draw1 = Draw(platform = platform, showplot = True, save_flag = True, replot = True)
+    draw1 = Draw(platform = platformd[sys.platform], outputlevel = 2, showplot = True, save_flag = True, replot = True)
     conn = database.opendb()
     draw1.plot(data1, conn)

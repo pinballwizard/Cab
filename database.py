@@ -16,28 +16,23 @@ def opendb(path = "D:\\"):
         print u"Невозможно создать/открыть базу данных"
     return conn
 
-def inittable(conn):
+def inittable(conn, tablename = "test"):
     c = conn.cursor()
-    tablename = "main"
     c.execute("DROP TABLE IF EXISTS"+ " " + tablename)
     c.execute("CREATE TABLE " + tablename +
-              '''(Id INTEGER PRIMARY KEY,
-                  Time BLOB, Value BLOB, Picture BLOB,
-                  Frequency BLOB, FFT BLOB, FFTPicture BLOB,
-                  Wiretype STRING, Wire STRING, Antenna STRING, Range STRING, Distance STRING,
-                  Amplitude STRING, Units STRING)''')
+              '''(Id INTEGER PRIMARY KEY, Data BLOB, Wiretype STRING, Wire STRING, Antenna STRING,
+                  Range STRING, Distance STRING, Amplitude STRING, Units STRING)''')
     conn.commit()
     
-def insert(conn, data):
-    tablename = "main"
+def insert(conn, data, tablename = "test"):
     c = conn.cursor()
-    c.execute("INSERT INTO" + " " + tablename +
-              '''(Time, Value, Frequency, FFT, Wiretype, Wire, Antenna, Range,
-                  Distance, Amplitude, Units) VALUES (?,?,?,?,?,?,?,?,?,?,?)''',
-              (pickle.dumps(data.xvalue), pickle.dumps(data.yvalue), pickle.dumps(data.fftxvalue),
-               pickle.dumps(data.fftyvalue), data.params['wiretype'], data.params['wire'], data.params['antenna'],
+    c.execute("INSERT INTO" + " " + tablename + " " +
+              '''(Data, Wiretype, Wire, Antenna, Range, Distance, Amplitude, Units) VALUES (?,?,?,?,?,?,?,?)''',
+              (pickle.dumps(data), data.params['wiretype'], data.params['wire'], data.params['antenna'],
                data.params['range'], data.params['distance'], data.params['amplitude'], data.params['measure']))
     conn.commit()
+    lastid = c.execute("SELECT Id FROM" + " " + tablename + " " + "WHERE" + " ")
+    return lastid
 
 def updatetable(conn, tablename, upname, upvalue):
     c = conn.cursor()
@@ -69,6 +64,8 @@ if __name__ == "__main__":
     data1 = DataForTest(limitvalue)
     conn = opendb()
     inittable(conn)
-    insert(conn, data1)
+    lastid = insert(conn, data1)
+    print "Id последного положенного элемента => " + lastid
+     
     conn.close()
     

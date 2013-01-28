@@ -10,6 +10,7 @@ import numpy
 import os
 import re
 import wx
+import csv
 
 class Data:
     '''New class for data'''
@@ -110,19 +111,25 @@ class Data:
         self.fftyvalue = self.fftdata[:,1]
         
 class FileSys:
-    def __init__(self, device, outputlevel = 1):
+    def __init__(self, device = None, outputlevel = 1):
         self.device = device
         self.outputlevel = outputlevel
     
     def csvread(self, csvpath):
         '''getting information from CSV'''
         data = []
-        datafile = open(csvpath, 'r')
-        for row in datafile:
-            data.append(row.strip())
-        datafile.close()
-        return data    
-
+        with open(csvpath, 'r') as datafile:
+#         datafile = open(csvpath, 'r')
+            for row in datafile:
+                data.append(row.strip())
+            datafile.close()
+        return data
+    
+    def csvwrite(self,csvfile,data):
+        datafile = csv.writer(csvfile, delimiter = ' ', dialect = 'excel')
+        for row in data:
+            datafile.writerow(row)
+        
     def rename(self,directory):
         a = lambda x: x[:-4].split('_')
         for root, dirs, files in os.walk(directory):

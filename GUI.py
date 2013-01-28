@@ -20,6 +20,27 @@ def dirchoise(v):
         return dialog.GetPath()
     dialog.Destroy()
 
+def filechoise():
+    '''Dialog windows for file choice'''
+    mess =u"Выберите файл"
+    s = wx.FD_OPEN
+    app = wx.PySimpleApp()
+    dialog = wx.FileDialog(None, message = mess, style = s)
+    if dialog.ShowModal() == wx.ID_OK:
+        return dialog.GetPath()
+    dialog.Destroy()
+    
+def filesave():
+    '''Dialog windows for file choice'''
+    mess =u"Выберите место для сохранения файл"
+    s = wx.FD_OPEN
+    app = wx.PySimpleApp()
+    dialog = wx.FileDialog(None, message = mess, style = s)
+    if dialog.ShowModal() == wx.ID_OK:
+        return dialog.GetPath()
+    dialog.Destroy()
+
+
 class Frame(wx.Frame):
     def __init__(self, parent = None, id = -1, pos=wx.DefaultPosition, title='hello'):
 #         size = wx.Size(510,450)
